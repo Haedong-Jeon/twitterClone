@@ -13,6 +13,10 @@
 		E9FABC0A251472F200918DD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E9FABC09251472F200918DD6 /* Assets.xcassets */; };
 		E9FABC0D251472F200918DD6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9FABC0B251472F200918DD6 /* LaunchScreen.storyboard */; };
 		E9FABC1B251475B400918DD6 /* MainTabController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FABC1A251475B400918DD6 /* MainTabController.swift */; };
+		E9FABC1D2514789600918DD6 /* FeedContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FABC1C2514789600918DD6 /* FeedContoller.swift */; };
+		E9FABC1F251478E300918DD6 /* ExploreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FABC1E251478E300918DD6 /* ExploreController.swift */; };
+		E9FABC212514790800918DD6 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FABC202514790800918DD6 /* NotificationController.swift */; };
+		E9FABC232514793200918DD6 /* ConversationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FABC222514793200918DD6 /* ConversationController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +28,10 @@
 		E9FABC0C251472F200918DD6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E9FABC0E251472F200918DD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E9FABC1A251475B400918DD6 /* MainTabController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabController.swift; sourceTree = "<group>"; };
+		E9FABC1C2514789600918DD6 /* FeedContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedContoller.swift; sourceTree = "<group>"; };
+		E9FABC1E251478E300918DD6 /* ExploreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExploreController.swift; sourceTree = "<group>"; };
+		E9FABC202514790800918DD6 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		E9FABC222514793200918DD6 /* ConversationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +98,10 @@
 			isa = PBXGroup;
 			children = (
 				E9FABC1A251475B400918DD6 /* MainTabController.swift */,
+				E9FABC1C2514789600918DD6 /* FeedContoller.swift */,
+				E9FABC1E251478E300918DD6 /* ExploreController.swift */,
+				E9FABC202514790800918DD6 /* NotificationController.swift */,
+				E9FABC222514793200918DD6 /* ConversationController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -185,8 +197,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9FABC212514790800918DD6 /* NotificationController.swift in Sources */,
+				E9FABC1D2514789600918DD6 /* FeedContoller.swift in Sources */,
+				E9FABC1F251478E300918DD6 /* ExploreController.swift in Sources */,
 				E9FABC01251472F100918DD6 /* AppDelegate.swift in Sources */,
 				E9FABC03251472F100918DD6 /* SceneDelegate.swift in Sources */,
+				E9FABC232514793200918DD6 /* ConversationController.swift in Sources */,
 				E9FABC1B251475B400918DD6 /* MainTabController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
