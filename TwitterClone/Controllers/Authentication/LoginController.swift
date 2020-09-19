@@ -18,27 +18,22 @@ class LoginController: UIViewController {
     }()
     
     private lazy var emailContainerView: UIView = {
-        let view: UIView = UIView()
-        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-
-        let imageView: UIImageView = UIImageView()
-        view.addSubview(imageView)
-        imageView.image = #imageLiteral(resourceName: "ic_mail_outline_white_2x-1")
-        imageView.anchor(left: view.safeAreaLayoutGuide.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingLeft: 8, paddingBottom: 8)
-        imageView.setDimensions(width: 24, height: 24)
+        let view: UIView = Utilities().inputContainerView(withImage: #imageLiteral(resourceName: "ic_mail_outline_white_2x-1"), textField: emailTextField)
         return view
     }()
     
     private lazy var passwordContainerView: UIView = {
-        let view: UIView = UIView()
-        view.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        
-        let imageView: UIImageView = UIImageView()
-        view.addSubview(imageView)
-        imageView.image = #imageLiteral(resourceName: "ic_lock_outline_white_2x")
-        imageView.anchor(left: view.safeAreaLayoutGuide.leftAnchor, bottom: view.safeAreaLayoutGuide.bottomAnchor, paddingLeft: 8, paddingBottom: 8)
-        imageView.setDimensions(width: 24, height: 24)
+        let view: UIView = Utilities().inputContainerView(withImage: #imageLiteral(resourceName: "ic_lock_outline_white_2x"), textField: passwordTextField)
         return view
+    }()
+    private let emailTextField: UITextField = {
+        let textField: UITextField = Utilities().textField(withPlaceholder: "Email")
+        return textField
+    }()
+    private let passwordTextField: UITextField = {
+        let textField: UITextField = Utilities().textField(withPlaceholder: "Password")
+        textField.isSecureTextEntry = true
+        return textField
     }()
     //MARK: - LifeCycle
     override func viewDidLoad() {
@@ -61,6 +56,6 @@ class LoginController: UIViewController {
         stack.spacing = 8
         
         view.addSubview(stack)
-        stack.anchor(top: logoImageView.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, right: view.safeAreaLayoutGuide.rightAnchor)
+        stack.anchor(top: logoImageView.bottomAnchor, left: view.safeAreaLayoutGuide.leftAnchor, right: view.safeAreaLayoutGuide.rightAnchor, paddingLeft: 16, paddingRight: 16)
     }
 }
