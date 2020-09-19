@@ -11,9 +11,10 @@ class MainTabController: UITabBarController {
     //MARK: - Properties
     let actionButton: UIButton = {
         let button: UIButton = UIButton(type: .system)
-        button.backgroundColor = UIColor.blue
+        button.backgroundColor = UIColor.twitterBlue
         button.tintColor = UIColor.white
         button.setImage(UIImage(named: "new_tweet"), for: UIControl.State.normal)
+        button.addTarget(self, action: #selector(actionButtonTapped), for: UIControl.Event.touchUpInside)
         return button
     }()
     //MARK: - LifeCycle
@@ -21,6 +22,10 @@ class MainTabController: UITabBarController {
         super.viewDidLoad()
         configureViewControllers()
         configureUI()
+    }
+    //MARK: - Selectors
+    @objc func actionButtonTapped() {
+       print("1,2,3")
     }
     //MARK: - Helpers
     func configureUI() {
@@ -45,11 +50,9 @@ class MainTabController: UITabBarController {
         viewControllers = [feedNav, exploreNav, notificationsNav, conversationsNav]
     }
     func templateNavigationController(image: UIImage?, rootViewController: UIViewController) -> UINavigationController {
-        
         let nav: UINavigationController = UINavigationController(rootViewController: rootViewController)
         nav.tabBarItem.image = image
         nav.navigationBar.barTintColor = UIColor.white
-        
         return nav
     }
 }
