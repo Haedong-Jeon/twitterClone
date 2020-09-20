@@ -11,7 +11,6 @@ import Firebase
 class SignUpController: UIViewController {
     //MARK: - properties
     private let imagePicker: UIImagePickerController = UIImagePickerController()
-    private let databaseRefForUsers: DatabaseReference = Database.database().reference().child("users")
     private let plusPhotoButton: UIButton = {
         let button: UIButton = UIButton(type: UIButton.ButtonType.system)
         button.setImage(UIImage(named:"plus_photo"), for: UIControl.State.normal)
@@ -82,26 +81,43 @@ class SignUpController: UIViewController {
         present(imagePicker, animated: false, completion: nil)
     }
     @objc func handleRegistration() {
-        guard let profileImage: UIImage = self.profileImage else {
-            showSignUpResultMessage(title: "Err", Msg: "please, select profile image")
-            return
-        }
         guard let email: String = emailTextField.text else { return }
         guard let password: String = passwordTextField.text else { return }
         guard let fullName: String = fullNameTextField.text else { return }
         guard let userName: String = userNameTextField.text else { return }
-
-        Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
-            if let error = err {
-                self.showSignUpResultMessage(title: "Err", Msg: "\(error.localizedDescription)")
+        guard let profileImage: UIImage = self.profileImage else {
+            showSignUpResultMessage(title: "Err", Msg: "please, select profile image")
+            return
+        }
+        guard let imageData: Data = profileImage.jpegData(compressionQuality: 0.3) else { return }
+        let profileImgfileName: String = NSUUID().uuidString
+        let userProfileImgRef = STORAGE_REF_PROFILE_IMGS.child(profileImgfileName)
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                self.showSignUpResultMessage(title: "ERR in creating User", Msg: "\(error.localizedDescription)")
                 return
             }
-            guard let uid: String = result?.user.uid else { return }
-            let values: [String: Any] = ["email": email, "userName": userName, "fullName": fullName]
-                self.databaseRefForUsers.child(uid).updateChildValues(values) { (err, ref) in
-                self.showSignUpResultMessage(title: "Success", Msg: "sign up Complete")
+            userProfileImgRef.putData(imageData, metadata: nil) { (meta, error) in
+                if let error = error {
+                    self.showSignUpResultMessage(title: "ERR in upload image", Msg: "\(error.localizedDescription)")
+                }
+                userProfileImgRef.downloadURL { (url, error) in
+                    guard let profileImgUrl: String = url?.absoluteString else { return }
+                    if let error = error {
+                        self.showSignUpResultMessage(title: "Err", Msg: "\(error.localizedDescription)")
+                        return
+                    }
+                    guard let uid: String = result?.user.uid else { return }
+                    let values: [String: Any] = ["email": email, "userName": userName, "fullName": fullName, "profileImgURL": profileImgUrl]
+                    DB_REF_USERS.child(uid).updateChildValues(values) { (err, ref) in
+                        self.showSignUpResultMessage(title: "Success", Msg: "sign up Complete")
+                    }
+                }
             }
         }
+
+
     }
     //MARK: - Helpers
     func configureUI() {
