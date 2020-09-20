@@ -86,38 +86,19 @@ class SignUpController: UIViewController {
         guard let fullName: String = fullNameTextField.text else { return }
         guard let userName: String = userNameTextField.text else { return }
         guard let profileImage: UIImage = self.profileImage else {
-            showSignUpResultMessage(title: "Err", Msg: "please, select profile image")
+            let alert: UIAlertController = UIAlertController(title: "Error", message: "please selecte profile img", preferredStyle: .alert)
+            let actionButton: UIAlertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(actionButton)
+            self.present(alert, animated: false, completion: nil)
             return
         }
-        guard let imageData: Data = profileImage.jpegData(compressionQuality: 0.3) else { return }
-        let profileImgfileName: String = NSUUID().uuidString
-        let userProfileImgRef = STORAGE_REF_PROFILE_IMGS.child(profileImgfileName)
-        
-        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
-            if let error = error {
-                self.showSignUpResultMessage(title: "ERR in creating User", Msg: "\(error.localizedDescription)")
-                return
-            }
-            userProfileImgRef.putData(imageData, metadata: nil) { (meta, error) in
-                if let error = error {
-                    self.showSignUpResultMessage(title: "ERR in upload image", Msg: "\(error.localizedDescription)")
-                }
-                userProfileImgRef.downloadURL { (url, error) in
-                    guard let profileImgUrl: String = url?.absoluteString else { return }
-                    if let error = error {
-                        self.showSignUpResultMessage(title: "Err", Msg: "\(error.localizedDescription)")
-                        return
-                    }
-                    guard let uid: String = result?.user.uid else { return }
-                    let values: [String: Any] = ["email": email, "userName": userName, "fullName": fullName, "profileImgURL": profileImgUrl]
-                    DB_REF_USERS.child(uid).updateChildValues(values) { (err, ref) in
-                        self.showSignUpResultMessage(title: "Success", Msg: "sign up Complete")
-                    }
-                }
-            }
+        let userCredential: AuthCredentials = AuthCredentials(email: email, password: password, fullName: fullName, userName: userName, profileImage: profileImage)
+        AuthService.shared.registerUser(credential: userCredential) { (error, ref) in
+            let alert: UIAlertController = UIAlertController(title: "SUCCESS", message: "sign up complete", preferredStyle: .alert)
+            let actionButton: UIAlertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+            alert.addAction(actionButton)
+            self.present(alert, animated: false, completion: nil)
         }
-
-
     }
     //MARK: - Helpers
     func configureUI() {
@@ -158,11 +139,5 @@ extension SignUpController: UIImagePickerControllerDelegate, UINavigationControl
         plusPhotoButton.layer.borderWidth = 3
         
         dismiss(animated: true, completion: nil)
-    }
-    func showSignUpResultMessage(title: String, Msg: String) {
-        let alertController: UIAlertController = UIAlertController(title: title, message: Msg, preferredStyle: UIAlertController.Style.alert)
-        let alertActionMsg: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
-        alertController.addAction(alertActionMsg)
-        self.present(alertController, animated: false, completion: nil)
     }
 }
