@@ -19,6 +19,7 @@ struct AuthCredentials {
 
 struct AuthService {
     static let shared: AuthService = AuthService()
+    private init(){}
     func registerUser(credential: AuthCredentials, completion: @escaping(Error?, DatabaseReference) -> Void) {
         guard let imageData: Data = credential.profileImage.jpegData(compressionQuality: 0.3) else { return }
         let profileImgfileName: String = NSUUID().uuidString
