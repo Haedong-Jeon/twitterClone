@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SignUpController: UIViewController {
     //MARK: - properties
@@ -79,7 +80,23 @@ class SignUpController: UIViewController {
         present(imagePicker, animated: false, completion: nil)
     }
     @objc func handleRegistration() {
+        guard let email: String = emailTextField.text else { return }
+        guard let password: String = passwordTextField.text else { return }
         
+        Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
+            if let error = err {
+                let alertController: UIAlertController = UIAlertController(title: "sign up err", message: "\(error.localizedDescription)", preferredStyle: UIAlertController.Style.alert)
+                let alertActionMsg: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
+                alertController.addAction(alertActionMsg)
+                self.present(alertController, animated: false, completion: nil)
+                print("Error in creating User - \(error.localizedDescription)")
+                return
+            }
+            let alertController: UIAlertController = UIAlertController(title: "success", message: "sign up complete", preferredStyle: UIAlertController.Style.alert)
+            let alertActionMsg: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
+            alertController.addAction(alertActionMsg)
+            self.present(alertController, animated: false, completion: nil)
+        }
     }
     //MARK: - Helpers
     func configureUI() {
