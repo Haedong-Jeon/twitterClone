@@ -78,7 +78,7 @@ class SignUpController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     @objc func handleAddProfilePhoto() {
-        present(imagePicker, animated: false, completion: nil)
+        present(imagePicker, animated: true, completion: nil)
     }
     @objc func handleRegistration() {
         guard let email: String = emailTextField.text else { return }
@@ -94,10 +94,15 @@ class SignUpController: UIViewController {
         }
         let userCredential: AuthCredentials = AuthCredentials(email: email, password: password, fullName: fullName, userName: userName, profileImage: profileImage)
         AuthService.shared.registerUser(credential: userCredential) { (error, ref) in
-            let alert: UIAlertController = UIAlertController(title: "SUCCESS", message: "sign up complete", preferredStyle: .alert)
-            let actionButton: UIAlertAction = UIAlertAction(title: "OK", style: .default, handler: nil)
-            alert.addAction(actionButton)
-            self.present(alert, animated: false, completion: nil)
+            if let error = error {
+                print("DEBUG: error in update user value in sign up - \(error.localizedDescription)")
+            }
+            
+            guard let window = UIApplication.shared.windows.first(where: {$0.isKeyWindow}) else { return }
+            guard let tab: MainTabController = window.rootViewController as? MainTabController else { return }
+            
+            tab.authenticateUserAndConfigureUI()
+            self.dismiss(animated: true, completion: nil)
         }
     }
     //MARK: - Helpers
