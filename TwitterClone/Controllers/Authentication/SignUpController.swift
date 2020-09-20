@@ -11,6 +11,7 @@ import Firebase
 class SignUpController: UIViewController {
     //MARK: - properties
     private let imagePicker: UIImagePickerController = UIImagePickerController()
+    private let databaseRefForUsers: DatabaseReference = Database.database().reference().child("users")
     private let plusPhotoButton: UIButton = {
         let button: UIButton = UIButton(type: UIButton.ButtonType.system)
         button.setImage(UIImage(named:"plus_photo"), for: UIControl.State.normal)
@@ -18,6 +19,7 @@ class SignUpController: UIViewController {
         button.addTarget(self, action: #selector(handleAddProfilePhoto), for: UIControl.Event.touchUpInside)
         return button
     }()
+    private var profileImage: UIImage?
     private lazy var emailContainerView: UIView = {
         let view: UIView = Utilities().inputContainerView(withImage: #imageLiteral(resourceName: "ic_mail_outline_white_2x-1"), textField: emailTextField)
         return view
@@ -80,22 +82,25 @@ class SignUpController: UIViewController {
         present(imagePicker, animated: false, completion: nil)
     }
     @objc func handleRegistration() {
+        guard let profileImage: UIImage = self.profileImage else {
+            showSignUpResultMessage(title: "Err", Msg: "please, select profile image")
+            return
+        }
         guard let email: String = emailTextField.text else { return }
         guard let password: String = passwordTextField.text else { return }
-        
+        guard let fullName: String = fullNameTextField.text else { return }
+        guard let userName: String = userNameTextField.text else { return }
+
         Auth.auth().createUser(withEmail: email, password: password) { (result, err) in
             if let error = err {
-                let alertController: UIAlertController = UIAlertController(title: "sign up err", message: "\(error.localizedDescription)", preferredStyle: UIAlertController.Style.alert)
-                let alertActionMsg: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
-                alertController.addAction(alertActionMsg)
-                self.present(alertController, animated: false, completion: nil)
-                print("Error in creating User - \(error.localizedDescription)")
+                self.showSignUpResultMessage(title: "Err", Msg: "\(error.localizedDescription)")
                 return
             }
-            let alertController: UIAlertController = UIAlertController(title: "success", message: "sign up complete", preferredStyle: UIAlertController.Style.alert)
-            let alertActionMsg: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
-            alertController.addAction(alertActionMsg)
-            self.present(alertController, animated: false, completion: nil)
+            guard let uid: String = result?.user.uid else { return }
+            let values: [String: Any] = ["email": email, "userName": userName, "fullName": fullName]
+                self.databaseRefForUsers.child(uid).updateChildValues(values) { (err, ref) in
+                self.showSignUpResultMessage(title: "Success", Msg: "sign up Complete")
+            }
         }
     }
     //MARK: - Helpers
@@ -126,6 +131,7 @@ class SignUpController: UIViewController {
 extension SignUpController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let profileImage = info[UIImagePickerController.InfoKey.editedImage] as? UIImage else { return }
+        self.profileImage = profileImage
         
         plusPhotoButton.setImage(profileImage.withRenderingMode(UIImage.RenderingMode.alwaysOriginal), for: UIControl.State.normal)
         plusPhotoButton.layer.cornerRadius = 128 / 2
@@ -136,5 +142,11 @@ extension SignUpController: UIImagePickerControllerDelegate, UINavigationControl
         plusPhotoButton.layer.borderWidth = 3
         
         dismiss(animated: true, completion: nil)
+    }
+    func showSignUpResultMessage(title: String, Msg: String) {
+        let alertController: UIAlertController = UIAlertController(title: title, message: Msg, preferredStyle: UIAlertController.Style.alert)
+        let alertActionMsg: UIAlertAction = UIAlertAction(title: "OK", style: UIAlertAction.Style.default, handler: nil)
+        alertController.addAction(alertActionMsg)
+        self.present(alertController, animated: false, completion: nil)
     }
 }
