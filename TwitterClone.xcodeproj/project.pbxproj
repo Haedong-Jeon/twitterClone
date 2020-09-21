@@ -12,9 +12,11 @@
 		E9014CD125159F39004A590C /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9014CD025159F39004A590C /* LoginController.swift */; };
 		E9014CD325159FDC004A590C /* SignUpController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9014CD225159FDC004A590C /* SignUpController.swift */; };
 		E9014CD52515D17F004A590C /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9014CD42515D17F004A590C /* Utilities.swift */; };
+		E93B06F7251831E200114CED /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = E93B06F6251831E200114CED /* User.swift */; };
 		E93EF6A22516D899001573B9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E93EF6A12516D899001573B9 /* GoogleService-Info.plist */; };
 		E982DC512516E99D00C1189A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E982DC502516E99D00C1189A /* Constants.swift */; };
 		E982DC532516F5BD00C1189A /* AuthServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = E982DC522516F5BD00C1189A /* AuthServices.swift */; };
+		E999BB9D25182E9000F481A9 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E999BB9C25182E9000F481A9 /* UserService.swift */; };
 		E9FABC01251472F100918DD6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FABC00251472F100918DD6 /* AppDelegate.swift */; };
 		E9FABC03251472F100918DD6 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9FABC02251472F100918DD6 /* SceneDelegate.swift */; };
 		E9FABC08251472F100918DD6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E9FABC06251472F100918DD6 /* Main.storyboard */; };
@@ -34,9 +36,11 @@
 		E9014CD025159F39004A590C /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		E9014CD225159FDC004A590C /* SignUpController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpController.swift; sourceTree = "<group>"; };
 		E9014CD42515D17F004A590C /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		E93B06F6251831E200114CED /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		E93EF6A12516D899001573B9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		E982DC502516E99D00C1189A /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E982DC522516F5BD00C1189A /* AuthServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServices.swift; sourceTree = "<group>"; };
+		E999BB9C25182E9000F481A9 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		E9FABBFD251472F100918DD6 /* TwitterClone.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TwitterClone.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E9FABC00251472F100918DD6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E9FABC02251472F100918DD6 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -142,6 +146,7 @@
 			isa = PBXGroup;
 			children = (
 				E982DC522516F5BD00C1189A /* AuthServices.swift */,
+				E999BB9C25182E9000F481A9 /* UserService.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -176,6 +181,7 @@
 		E9FABC19251473D300918DD6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E93B06F6251831E200114CED /* User.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -295,6 +301,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E999BB9D25182E9000F481A9 /* UserService.swift in Sources */,
 				E9FABC212514790800918DD6 /* NotificationController.swift in Sources */,
 				E9FABC1D2514789600918DD6 /* FeedContoller.swift in Sources */,
 				E9014CD52515D17F004A590C /* Utilities.swift in Sources */,
@@ -302,6 +309,7 @@
 				E9014CCE251595A4004A590C /* Extensions.swift in Sources */,
 				E9014CD125159F39004A590C /* LoginController.swift in Sources */,
 				E9014CD325159FDC004A590C /* SignUpController.swift in Sources */,
+				E93B06F7251831E200114CED /* User.swift in Sources */,
 				E982DC532516F5BD00C1189A /* AuthServices.swift in Sources */,
 				E9FABC01251472F100918DD6 /* AppDelegate.swift in Sources */,
 				E9FABC03251472F100918DD6 /* SceneDelegate.swift in Sources */,

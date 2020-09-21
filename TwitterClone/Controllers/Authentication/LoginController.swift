@@ -62,6 +62,7 @@ class LoginController: UIViewController {
         guard let password: String = passwordTextField.text else { return }
         AuthService.shared.userLogIn(withEmail: email, password: password) { (result, error) in
             if let error = error {
+                print("DEBUG: Error in handle log in - \(error.localizedDescription)")
                 return
             }
             guard let window = UIApplication.shared.windows.first(where: {$0.isKeyWindow}) else { return }
