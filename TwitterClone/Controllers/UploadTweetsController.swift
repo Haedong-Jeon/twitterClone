@@ -50,7 +50,14 @@ class UploadTweetsController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     @objc func handleUploadTweet() {
-        
+        guard let caption: String = captionTextView.text else { return }
+        TweetService.shared.uploadTweet(caption: caption) { (error, ref) in
+            if let error = error {
+                print("DEBUG: fail to upload tweet - \(error)")
+                return
+            }
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     //MARK: - API
     //MARK: - Helper
