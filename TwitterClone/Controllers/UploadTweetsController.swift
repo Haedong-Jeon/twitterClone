@@ -9,6 +9,7 @@ import UIKit
 
 class UploadTweetsController: UIViewController {
     //MARK: - properties
+    private let user: User
     private lazy var actionButton: UIButton = {
         let button: UIButton = UIButton(type: UIButton.ButtonType.system)
         button.backgroundColor = UIColor.twitterBlue
@@ -23,10 +24,25 @@ class UploadTweetsController: UIViewController {
         button.addTarget(self, action: #selector(handleUploadTweet), for: UIControl.Event.touchUpInside)
         return button
     }()
+    private let profileImgView: UIImageView = {
+        let imgView: UIImageView = UIImageView()
+//        imgView.contentMode = UIView.ContentMode.scaleAspectFit
+        imgView.setDimensions(width: 48, height: 48)
+        imgView.layer.cornerRadius = 48 / 2
+        imgView.layer.masksToBounds = true
+        return imgView
+    }()
     //MARK: - LifeCycles
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+    }
+    init(user: User) {
+        self.user = user
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     //MARK: - Selector
     @objc func handleCancel() {
@@ -39,12 +55,19 @@ class UploadTweetsController: UIViewController {
     //MARK: - Helper
     func configureUI() {
         view.backgroundColor = UIColor.white
+        configureNavigationBar()
+        
+        view.addSubview(profileImgView)
+        profileImgView.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, paddingTop: 16, paddingLeft: 16)
+        profileImgView.sd_setImage(with: user.profileImgURL, completed: nil)
+
+    }
+    func configureNavigationBar() {
         navigationController?.navigationBar.barTintColor = UIColor.white
         navigationController?.navigationBar.isTranslucent = false
         
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.cancel, target: self, action: #selector(handleCancel))
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: actionButton)
-        
     }
 }
 
