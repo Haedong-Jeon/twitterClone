@@ -61,7 +61,8 @@ class MainTabController: UITabBarController {
     
     //MARK: - Selectors
     @objc func actionButtonTapped() {
-       print("1,2,3")
+        let nav: UINavigationController = UINavigationController(rootViewController: UploadTweetsController())
+        present(nav, animated: true, completion: nil)
     }
     //MARK: - Helpers
     func configureUI() {
