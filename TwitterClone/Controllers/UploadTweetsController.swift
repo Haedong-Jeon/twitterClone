@@ -26,12 +26,13 @@ class UploadTweetsController: UIViewController {
     }()
     private let profileImgView: UIImageView = {
         let imgView: UIImageView = UIImageView()
-//        imgView.contentMode = UIView.ContentMode.scaleAspectFit
+        imgView.contentMode = UIImageView.ContentMode.scaleAspectFill
         imgView.setDimensions(width: 48, height: 48)
         imgView.layer.cornerRadius = 48 / 2
         imgView.layer.masksToBounds = true
         return imgView
     }()
+    private let captionTextView: CaptionTextView = CaptionTextView()
     //MARK: - LifeCycles
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,9 +57,11 @@ class UploadTweetsController: UIViewController {
     func configureUI() {
         view.backgroundColor = UIColor.white
         configureNavigationBar()
-        
-        view.addSubview(profileImgView)
-        profileImgView.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, paddingTop: 16, paddingLeft: 16)
+        let stack: UIStackView = UIStackView(arrangedSubviews: [profileImgView, captionTextView])
+        stack.axis = NSLayoutConstraint.Axis.horizontal
+        stack.spacing = 12
+        view.addSubview(stack)
+        stack.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16)
         profileImgView.sd_setImage(with: user.profileImgURL, completed: nil)
 
     }
