@@ -2,7 +2,7 @@
 //  MainTabController.swift
 //  TwitterClone
 //
-//  Created by 전해동 on 2020/09/18.
+//  Created by 전해동ㅓ on 2020/09/18.
 //
 
 import UIKit
@@ -54,11 +54,11 @@ class MainTabController: UITabBarController {
         }
     }
     func fetchUser() {
-        UserService.shared.fetchUser { user in
+        guard let currentUid: String = Auth.auth().currentUser?.uid else { return }
+        UserService.shared.fetchUser(uid: currentUid) { user in
             self.user = user
         }
     }
-    
     //MARK: - Selectors
     @objc func actionButtonTapped() {
         guard let user: User = self.user else { return }

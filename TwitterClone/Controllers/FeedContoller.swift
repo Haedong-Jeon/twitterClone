@@ -8,7 +8,8 @@ import UIKit
 import SDWebImage
 
 private let reuseIdentifier: String = "TweetCell"
-class FeedController: UICollectionViewController {
+
+class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
     //MARK: - Properties
     var user: User? {
         didSet {
@@ -41,7 +42,6 @@ class FeedController: UICollectionViewController {
         imageView.contentMode = UIImageView.ContentMode.scaleAspectFill
         imageView.setDimensions(width: 44, height: 44)
         navigationItem.titleView = imageView
-        
     }
     func configureLeftBarButton() {
         guard let user: User = user else { return }
@@ -57,18 +57,17 @@ class FeedController: UICollectionViewController {
 }
 //MARK: - Collection View Control
 extension FeedController {
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return tweets.count
+    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.tweets.count
     }
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: TweetCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
+        guard let cell: TweetCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? TweetCell else {
+            return UICollectionViewCell()
+        }
         cell.tweet = tweets[indexPath.row]
         return cell
     }
-}
-//MARK: - Collection View Flow Layout Control
-extension FeedController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.frame.width, height: 120)
+        return CGSize(width: collectionView.frame.width, height: 100)
     }
 }
