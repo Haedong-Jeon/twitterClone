@@ -15,6 +15,11 @@ class FeedController: UICollectionViewController {
             configureLeftBarButton()
         }
     }
+    var tweets: [Tweet] = [Tweet]() {
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +29,7 @@ class FeedController: UICollectionViewController {
     //MARK: - API
     func fetchTweets() {
         TweetService.shared.fetchTweets { tweets in
-            
+            self.tweets = tweets
         }
     }
     //MARK: - Helpers
@@ -53,13 +58,15 @@ class FeedController: UICollectionViewController {
 //MARK: - Collection View Control
 extension FeedController {
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 5
+        return tweets.count
     }
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell: UICollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
+        let cell: TweetCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! TweetCell
+        cell.tweet = tweets[indexPath.row]
         return cell
     }
 }
+//MARK: - Collection View Flow Layout Control
 extension FeedController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width, height: 120)

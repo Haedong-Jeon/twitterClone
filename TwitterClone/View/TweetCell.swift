@@ -8,6 +8,11 @@
 import UIKit
 
 class TweetCell: UICollectionViewCell {
+    var tweet: Tweet? {
+        didSet {
+            configure()
+        }
+    }
     //MARK: - properties
     private let infoLabel: UILabel = UILabel()
     private let profileImgView: UIImageView = {
@@ -103,4 +108,8 @@ class TweetCell: UICollectionViewCell {
     }
     //MARK: - Selector
     //MARK: - Helpers
+    func configure() {
+        guard let tweet: Tweet = self.tweet else { return }
+        captionLabel.text = tweet.caption
+    }
 }
