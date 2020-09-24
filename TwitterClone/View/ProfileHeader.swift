@@ -67,6 +67,11 @@ class ProfileHeader: UICollectionReusableView {
         label.textColor = UIColor.lightGray
         return label
     }()
+    private let underLineView: UIView = {
+        let view: UIView = UIView()
+        view.backgroundColor = UIColor.twitterBlue
+        return view
+    }()
     //MARK: - LifeCycles
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -87,6 +92,10 @@ class ProfileHeader: UICollectionReusableView {
         
         addSubview(filterBar)
         filterBar.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 50)
+        filterBar.delegate = self
+        
+        addSubview(underLineView)
+        underLineView.anchor(left: leftAnchor, bottom: bottomAnchor, width: frame.width / 3, height: 2)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -98,4 +107,14 @@ class ProfileHeader: UICollectionReusableView {
         
     }
     //MARK: - Helpers
+}
+//MARK: - PRofileFilterViewDelegate
+extension ProfileHeader: ProfileFilterViewDelegate {
+    func filterView(_ view: ProfileFilterView, didSelect indexPath: IndexPath) {
+        guard let cell = view.collectionView.cellForItem(at: indexPath) as? ProfileFilterCell else { return }
+        let xPosition = cell.frame.origin.x
+        UIView.animate(withDuration: 0.3) {
+            self.underLineView.frame.origin.x = xPosition
+        }
+    }
 }
