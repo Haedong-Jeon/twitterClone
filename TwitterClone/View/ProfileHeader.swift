@@ -9,6 +9,7 @@ import UIKit
 
 class ProfileHeader: UICollectionReusableView {
     //MARK: - Properties
+    private let filterBar: ProfileFilterView = ProfileFilterView()
     private lazy var profileImgView: UIImageView = {
         let imgView: UIImageView = UIImageView()
         imgView.contentMode = UIImageView.ContentMode.scaleAspectFill
@@ -83,6 +84,9 @@ class ProfileHeader: UICollectionReusableView {
         
         addSubview(userDetailStack)
         userDetailStack.anchor(top: profileImgView.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 8, paddingLeft: 12, paddingRight: 12)
+        
+        addSubview(filterBar)
+        filterBar.anchor(left: leftAnchor, bottom: bottomAnchor, right: rightAnchor, height: 50)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
