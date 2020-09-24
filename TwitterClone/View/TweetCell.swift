@@ -7,7 +7,13 @@
 
 import UIKit
 
+protocol TweetCellDelegateProtocol: class {
+    func handlProfileImgTapped(_ cell: TweetCell)
+}
+
 class TweetCell: UICollectionViewCell {
+    weak var delegate: TweetCellDelegateProtocol?
+    
     var tweet: Tweet? {
         didSet {
             configure()
@@ -15,12 +21,17 @@ class TweetCell: UICollectionViewCell {
     }
     //MARK: - properties
     private let infoLabel: UILabel = UILabel()
-    private let profileImgView: UIImageView = {
+    private lazy var profileImgView: UIImageView = {
         let imgView: UIImageView = UIImageView()
         imgView.contentMode = UIImageView.ContentMode.scaleAspectFill
         imgView.setDimensions(width: 48, height: 48)
         imgView.layer.cornerRadius = 48 / 2
         imgView.layer.masksToBounds = true
+        
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleProfileImgTapped))
+        imgView.addGestureRecognizer(tap)
+        imgView.isUserInteractionEnabled = true
+        
         return imgView
     }()
     private let captionLabel: UILabel = {
@@ -74,6 +85,9 @@ class TweetCell: UICollectionViewCell {
     }
     @objc func handleShareTapped() {
         
+    }
+    @objc func handleProfileImgTapped() {
+        delegate?.handlProfileImgTapped(self)
     }
     //MARK: - LifeCycle
     override init(frame: CGRect) {
