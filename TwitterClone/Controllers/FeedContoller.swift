@@ -74,7 +74,8 @@ extension FeedController {
 }
 extension FeedController: TweetCellDelegateProtocol {
     func handlProfileImgTapped(_ cell: TweetCell) {
-        let controller: ProfileController = ProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+        guard let user: User = cell.tweet?.user else { return }
+        let controller: ProfileController = ProfileController(user: user)
         navigationController?.pushViewController(controller, animated: true)
     }
 }
