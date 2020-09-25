@@ -27,6 +27,11 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         configureUI()
         fetchTweets()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.navigationBar.barStyle = UIBarStyle.default
+        navigationController?.navigationBar.isHidden = false
+    }
     //MARK: - API
     func fetchTweets() {
         TweetService.shared.fetchTweets { tweets in

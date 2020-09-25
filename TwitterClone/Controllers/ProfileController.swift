@@ -46,6 +46,7 @@ extension ProfileController {
             return UICollectionReusableView()
         }
         header.user = user
+        header.delegate = self
         return header
     }
 }
@@ -68,5 +69,10 @@ extension ProfileController: UICollectionViewDelegateFlowLayout {
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 350)
+    }
+}
+extension ProfileController: ProfileHeaderDelegate {
+    func handleBackButton() {
+        navigationController?.popViewController(animated: true)
     }
 }

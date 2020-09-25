@@ -7,8 +7,13 @@
 
 import UIKit
 
+protocol ProfileHeaderDelegate: class {
+    func handleBackButton()
+}
+
 class ProfileHeader: UICollectionReusableView {
     //MARK: - Properties
+    var delegate: ProfileHeaderDelegate?
     private let filterBar: ProfileFilterView = ProfileFilterView()
     var user: User? {
         didSet {
@@ -129,6 +134,7 @@ class ProfileHeader: UICollectionReusableView {
     }
     //MARK: - Selector
     @objc func handleBackButtonTapped() {
+        delegate?.handleBackButton()
     }
     @objc func handleEditProfileFollow() {
         
