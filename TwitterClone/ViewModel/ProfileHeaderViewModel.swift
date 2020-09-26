@@ -24,8 +24,10 @@ enum ProfileFilterOptions: Int, CaseIterable {
 struct ProfileHeaderViewModel {
     
     private let user: User
+    let userNameWithAtMark: String
     init(user: User){
         self.user = user
+        self.userNameWithAtMark = "@" + user.userName
     }
     var followersString: NSAttributedString? {
         return attributedText(withValue: 0, text: "sample")

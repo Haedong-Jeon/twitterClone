@@ -153,6 +153,9 @@ class ProfileHeader: UICollectionReusableView {
         profileImgView.sd_setImage(with: user.profileImgURL)
         followingLabel.attributedText = viewModel.followingString
         followersLabel.attributedText = viewModel.followersString
+        
+        fullNameLabel.text = user.fullName
+        userNameLabel.text = viewModel.userNameWithAtMark
     }
 }
 //MARK: - PRofileFilterViewDelegate
