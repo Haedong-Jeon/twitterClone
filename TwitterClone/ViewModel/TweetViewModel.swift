@@ -23,8 +23,8 @@ struct TweetViewModel {
     }
     var userInfoText: NSAttributedString {
         let title: NSMutableAttributedString = NSMutableAttributedString(string: user.fullName, attributes: [.font: UIFont.boldSystemFont(ofSize: 14)])
-        title.append(NSAttributedString(string: " @\(user.userName)" ,attributes:[.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.lightGray]))
-        title.append(NSAttributedString(string: " · \(timeStamp)", attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.lightGray]))
+        title.append(NSAttributedString(string: "\(user.userName)" ,attributes:[.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.lightGray]))
+        title.append(NSAttributedString(string: "· \(timeStamp)", attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.lightGray]))
         return title
     }
     init(tweet: Tweet) {

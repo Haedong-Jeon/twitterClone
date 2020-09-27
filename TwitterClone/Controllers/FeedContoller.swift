@@ -76,6 +76,10 @@ extension FeedController {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: 100)
     }
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let tweetController: TweetController = TweetController(tweet: tweets[indexPath.row])
+        navigationController?.pushViewController(tweetController, animated: true)
+    }
 }
 extension FeedController: TweetCellDelegateProtocol {
     func handlProfileImgTapped(_ cell: TweetCell) {

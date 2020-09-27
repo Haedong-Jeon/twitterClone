@@ -27,7 +27,7 @@ class TweetCell: UICollectionViewCell {
         imgView.setDimensions(width: 48, height: 48)
         imgView.layer.cornerRadius = 48 / 2
         imgView.layer.masksToBounds = true
-        
+        imgView.backgroundColor = UIColor.twitterBlue
         let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleProfileImgTapped))
         imgView.addGestureRecognizer(tap)
         imgView.isUserInteractionEnabled = true
@@ -38,7 +38,7 @@ class TweetCell: UICollectionViewCell {
         var uiLabel: UILabel = UILabel()
         uiLabel.font = UIFont.systemFont(ofSize: 14)
         uiLabel.numberOfLines = 0
-        uiLabel.text = ""
+        uiLabel.text = "this is sample Text"
         return uiLabel
     }()
     private lazy var commentButton: UIButton = {
