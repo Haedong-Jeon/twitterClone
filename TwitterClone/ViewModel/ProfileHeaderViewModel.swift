@@ -30,10 +30,10 @@ struct ProfileHeaderViewModel {
         self.userNameWithAtMark = "@" + user.userName
     }
     var followersString: NSAttributedString? {
-        return attributedText(withValue: 0, text: "sample")
+        return attributedText(withValue: user.stats?.followers ?? 0, text: "followers")
     }
     var followingString: NSAttributedString? {
-        return attributedText(withValue: 0, text: "sample")
+        return attributedText(withValue: user.stats?.following ?? 0, text: "following")
     }
     var actionButtonTitle: String {
         if user.isCurrentUser { return "Edit Profile" }
