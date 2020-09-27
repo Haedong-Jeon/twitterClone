@@ -37,7 +37,9 @@ struct ProfileHeaderViewModel {
     }
     var actionButtonTitle: String {
         if user.isCurrentUser { return "Edit Profile" }
-        return "Follow"
+        if !user.isFollowed && !user.isCurrentUser { return "Follow" }
+        if user.isFollowed { return "Unfollow" }
+        return "Loading"
     }
     fileprivate func attributedText(withValue value: Int, text: String) -> NSAttributedString {
         let attributedTitle: NSMutableAttributedString = NSMutableAttributedString(string: "\(value)", attributes: [NSAttributedString.Key.font: UIFont.boldSystemFont(ofSize:14)])
