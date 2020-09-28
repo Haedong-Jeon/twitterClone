@@ -92,6 +92,26 @@ class TweetHeader: UICollectionReusableView {
         label.text = "0 likes"
         return label
     }()
+    private lazy var commentButton: UIButton = {
+        let button = createButton(withImgName: "comment")
+        button.addTarget(self, action: #selector(handleCommentTapped), for: UIControl.Event.touchUpInside)
+        return button
+    }()
+    private lazy var retweetButton: UIButton = {
+        let button = createButton(withImgName: "retweet")
+        button.addTarget(self, action: #selector(handleRetweetTapped), for: UIControl.Event.touchUpInside)
+        return button
+    }()
+    private lazy var likeButton: UIButton = {
+        let button = createButton(withImgName: "like")
+        button.addTarget(self, action: #selector(handleLikeTapped), for: UIControl.Event.touchUpInside)
+        return button
+    }()
+    private lazy var shareButton: UIButton = {
+        let button = createButton(withImgName: "share")
+        button.addTarget(self, action: #selector(handleShareTapped), for: UIControl.Event.touchUpInside)
+        return button
+    }()
     //MARK: - LifeCycles
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -119,16 +139,42 @@ class TweetHeader: UICollectionReusableView {
         
         addSubview(statsView)
         statsView.anchor(top: dateLabel.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 20, height: 40)
+        
+        let actionButtonStack: UIStackView = UIStackView(arrangedSubviews: [commentButton, retweetButton, likeButton, shareButton])
+        actionButtonStack.spacing = 72
+        
+        addSubview(actionButtonStack)
+        actionButtonStack.centerX(inView: self)
+        actionButtonStack.anchor(bottom: bottomAnchor, paddingBottom: 12)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     //MARK: - Helpers
+    func createButton(withImgName imgName: String) -> UIButton {
+        let button: UIButton = UIButton(type: UIButton.ButtonType.system)
+        button.setImage(UIImage(named: imgName), for: UIControl.State.normal)
+        button.tintColor = UIColor.darkGray
+        button.setDimensions(width: 20, height: 20)
+        return button
+    }
     //MARK: - API
     //MARK: - Selectors
     @objc func handleProfileImgTapped() {
     }
     @objc func showActionSheet() {
+        
+    }
+    @objc func handleCommentTapped() {
+        
+    }
+    @objc func handleRetweetTapped() {
+        
+    }
+    @objc func handleLikeTapped() {
+        
+    }
+    @objc func handleShareTapped() {
         
     }
 }
