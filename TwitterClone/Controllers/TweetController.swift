@@ -50,6 +50,7 @@ extension TweetController {
         guard let header: TweetHeader = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: headerReuseIdentifier, for: indexPath) as? TweetHeader else {
             return UICollectionReusableView()
         }
+        header.tweet = self.tweet
         return header
     }
 }

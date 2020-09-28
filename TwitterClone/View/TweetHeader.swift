@@ -9,6 +9,11 @@ import UIKit
 
 class TweetHeader: UICollectionReusableView {
     //MARK: - Properties
+    var tweet: Tweet? {
+        didSet {
+            configure()
+        }
+    }
     private lazy var profileImgView: UIImageView = {
         let imgView: UIImageView = UIImageView()
         imgView.contentMode = UIImageView.ContentMode.scaleAspectFill
@@ -80,18 +85,10 @@ class TweetHeader: UICollectionReusableView {
         secondDivider.anchor(left: view.leftAnchor, bottom: view.bottomAnchor, right: view.rightAnchor, paddingLeft: 8, height: 1.0)
         return view
     }()
-    private lazy var retweetsLabel: UILabel = {
-        var label: UILabel = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.text = "0 likes"
-        return label
-    }()
-    private lazy var likesLabel: UILabel = {
-        var label: UILabel = UILabel()
-        label.font = UIFont.systemFont(ofSize: 14)
-        label.text = "0 likes"
-        return label
-    }()
+    
+    private lazy var retweetsLabel: UILabel = UILabel()
+    private lazy var likesLabel: UILabel = UILabel()
+    
     private lazy var commentButton: UIButton = {
         let button = createButton(withImgName: "comment")
         button.addTarget(self, action: #selector(handleCommentTapped), for: UIControl.Event.touchUpInside)
@@ -157,6 +154,20 @@ class TweetHeader: UICollectionReusableView {
         button.tintColor = UIColor.darkGray
         button.setDimensions(width: 20, height: 20)
         return button
+    }
+    func configure() {
+        guard let tweet: Tweet = self.tweet else { return }
+        let viewModel: TweetViewModel = TweetViewModel(tweet: tweet)
+        
+        captionLabel.text = viewModel.tweet.caption
+        fullNameLabel.text = viewModel.user.fullName
+        userNameLabel.text = viewModel.userInfoTextString
+        dateLabel.text = viewModel.headerTimeStamp
+        
+        retweetsLabel.attributedText = viewModel.retweetsAttributedString
+        likesLabel.attributedText = viewModel.likesAttributedString
+        
+        profileImgView.sd_setImage(with: viewModel.profileImgURL)
     }
     //MARK: - API
     //MARK: - Selectors
