@@ -74,7 +74,9 @@ extension FeedController {
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 100)
+        let viewModel: TweetViewModel = TweetViewModel(tweet: tweets[indexPath.row])
+        let height: CGFloat = viewModel.size(forWidth: view.frame.width).height
+        return CGSize(width: collectionView.frame.width, height: height + 72)
     }
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let tweetController: TweetController = TweetController(tweet: tweets[indexPath.row])

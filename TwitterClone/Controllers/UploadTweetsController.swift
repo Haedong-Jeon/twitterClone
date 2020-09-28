@@ -67,6 +67,7 @@ class UploadTweetsController: UIViewController {
         let stack: UIStackView = UIStackView(arrangedSubviews: [profileImgView, captionTextView])
         stack.axis = NSLayoutConstraint.Axis.horizontal
         stack.spacing = 12
+        stack.alignment = UIStackView.Alignment.leading
         view.addSubview(stack)
         stack.anchor(top: view.safeAreaLayoutGuide.topAnchor, left: view.leftAnchor, right: view.rightAnchor, paddingTop: 16, paddingLeft: 16, paddingRight: 16)
         profileImgView.sd_setImage(with: user.profileImgURL, completed: nil)
