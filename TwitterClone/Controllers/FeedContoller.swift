@@ -84,9 +84,18 @@ extension FeedController {
     }
 }
 extension FeedController: TweetCellDelegateProtocol {
-    func handlProfileImgTapped(_ cell: TweetCell) {
+    func handleProfileImgTapped(_ cell: TweetCell) {
         guard let user: User = cell.tweet?.user else { return }
         let controller: ProfileController = ProfileController(user: user)
         navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    func handleReplyTapped(_ cell: TweetCell) {
+        guard let tweet: Tweet = cell.tweet else { return }
+        let controller: UploadTweetsController = UploadTweetsController(user: tweet.user!, config: .reply(to: tweet))
+        
+        let navigation: UINavigationController = UINavigationController(rootViewController: controller)
+        navigation.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+        present(navigation, animated: true, completion: nil)
     }
 }

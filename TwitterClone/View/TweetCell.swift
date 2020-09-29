@@ -8,7 +8,8 @@
 import UIKit
 
 protocol TweetCellDelegateProtocol: class {
-    func handlProfileImgTapped(_ cell: TweetCell)
+    func handleProfileImgTapped(_ cell: TweetCell)
+    func handleReplyTapped(_ cell: TweetCell)
 }
 
 class TweetCell: UICollectionViewCell {
@@ -75,7 +76,7 @@ class TweetCell: UICollectionViewCell {
     }()
     //MARK: - Selectors
     @objc func handleCommentTapped() {
-        
+        delegate?.handleReplyTapped(self)
     }
     @objc func handleRetweetTapped() {
         
@@ -87,7 +88,7 @@ class TweetCell: UICollectionViewCell {
         
     }
     @objc func handleProfileImgTapped() {
-        delegate?.handlProfileImgTapped(self)
+        delegate?.handleProfileImgTapped(self)
     }
     //MARK: - LifeCycle
     override init(frame: CGRect) {

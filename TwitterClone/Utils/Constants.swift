@@ -18,3 +18,5 @@ let DB_REF_USER_TWEETS: DatabaseReference = DB_REF_ROOT.child("user-tweets")
 
 let DB_REF_USER_FOLLOWERS: DatabaseReference = DB_REF_ROOT.child("user-followers")
 let DB_REF_USER_FOLLOWING: DatabaseReference = DB_REF_ROOT.child("user-following")
+
+let DB_REF_TWEET_REPLIES: DatabaseReference = DB_REF_ROOT.child("tweet-replies")

@@ -11,12 +11,18 @@ import Firebase
 struct TweetService {
     static let shared: TweetService = TweetService()
     private init() {}
-    func uploadTweet(caption: String, completion: @escaping(Error?, DatabaseReference)-> Void) {
+    func uploadTweet(caption: String, type: UploadTweetConfiguration, completion: @escaping(Error?, DatabaseReference)-> Void) {
         guard let uid: String = Auth.auth().currentUser?.uid else { return }
         let values: [String: Any] = ["uid": uid, "timeStamp": Int(NSDate().timeIntervalSince1970), "likes": 0, "retweets": 0, "caption": caption] as [String : Any]
-        DB_REF_TWEETS.childByAutoId().updateChildValues(values) { (error, ref) in
-            guard let tweetID: String = ref.key else { return }
-            DB_REF_USER_TWEETS.child(uid).updateChildValues([tweetID: 1], withCompletionBlock: completion)
+        
+        switch type {
+        case .tweet:
+            DB_REF_TWEETS.childByAutoId().updateChildValues(values) { (error, ref) in
+                guard let tweetID: String = ref.key else { return }
+                DB_REF_USER_TWEETS.child(uid).updateChildValues([tweetID: 1], withCompletionBlock: completion)
+            }
+        case .reply(to: let tweet):
+            DB_REF_TWEET_REPLIES.child(tweet.tweetId).childByAutoId().updateChildValues(values, withCompletionBlock: completion)
         }
     }
     func fetchTweets(completion: @escaping([Tweet]) -> Void) {
