@@ -134,15 +134,17 @@ class TweetHeader: UICollectionReusableView {
         optionButton.centerY(inView: userInfoStack)
         optionButton.anchor(right: rightAnchor, paddingRight: 8)
         
-        addSubview(statsView)
-        statsView.anchor(top: dateLabel.bottomAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 12, height: 40)
-        
         let actionButtonStack: UIStackView = UIStackView(arrangedSubviews: [commentButton, retweetButton, likeButton, shareButton])
         actionButtonStack.spacing = 72
         
+        addSubview(statsView)
+        statsView.anchor(top: dateLabel.bottomAnchor, left: leftAnchor, right: rightAnchor, height: 40)
+        
         addSubview(actionButtonStack)
         actionButtonStack.centerX(inView: self)
-        actionButtonStack.anchor(bottom: bottomAnchor, paddingBottom: 12)
+        actionButtonStack.anchor(top: statsView.bottomAnchor, bottom: bottomAnchor)
+        
+
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
