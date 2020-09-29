@@ -11,7 +11,7 @@ import Firebase
 struct TweetService {
     static let shared: TweetService = TweetService()
     private init() {}
-    func uploadTweet(caption: String, type: UploadTweetConfiguration, completion: @escaping(Error?, DatabaseReference)-> Void) {
+    func uploadTweet(caption: String, type: UploadTweetConfiguration, completion: @escaping(DatabaseCompletion)) {
         guard let uid: String = Auth.auth().currentUser?.uid else { return }
         let values: [String: Any] = ["uid": uid, "timeStamp": Int(NSDate().timeIntervalSince1970), "likes": 0, "retweets": 0, "caption": caption] as [String : Any]
         
@@ -54,6 +54,21 @@ struct TweetService {
                     tweets.append(tweet)
                     completion(tweets)
                 }
+            }
+        }
+    }
+    func fetchReplies(forTweet tweet: Tweet, completion: @escaping([Tweet]) -> Void) {
+        var tweets: [Tweet] = [Tweet]()
+        DB_REF_TWEET_REPLIES.child(tweet.tweetId).observe(.childAdded) { snapShot in
+            guard let dictionary: [String: Any] = snapShot.value as? [String: Any] else { return }
+            guard let uid: String = dictionary["uid"] as? String else { return }
+            let tweetID: String = snapShot.key
+            
+            UserService.shared.fetchUser(uid: uid) { user in
+                var tweet: Tweet = Tweet(tweetId: tweetID, dictionary: dictionary)
+                tweet.user = user
+                tweets.append(tweet)
+                completion(tweets)
             }
         }
     }

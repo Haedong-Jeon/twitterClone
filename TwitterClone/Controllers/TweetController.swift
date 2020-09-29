@@ -13,6 +13,11 @@ private let cellReuseIdentifier: String = "TweetCell"
 class TweetController: UICollectionViewController {
     //MARK: - Properties
     private let tweet: Tweet
+    private var replies: [Tweet] = [Tweet](){
+        didSet {
+            collectionView.reloadData()
+        }
+    }
     //MARK: - LifeCycles
     init(tweet: Tweet) {
         self.tweet = tweet
@@ -24,6 +29,7 @@ class TweetController: UICollectionViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureCollectionView()
+        fetchReplies()
     }
     //MARK: - Helpers
     func configureCollectionView() {
@@ -33,17 +39,23 @@ class TweetController: UICollectionViewController {
     }
     //MARK: - Selectors
     //MARK: - API
+    func fetchReplies() {
+        TweetService.shared.fetchReplies(forTweet: tweet) { replies in
+            self.replies = replies
+        }
+    }
 }
 
 //MARK: - UICollectionView DataSource / Delegate
 extension TweetController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return replies.count
     }
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell: TweetCell = collectionView.dequeueReusableCell(withReuseIdentifier: cellReuseIdentifier, for: indexPath) as? TweetCell else {
             return UICollectionViewCell()
         }
+        cell.tweet = replies[indexPath.row]
         return cell
     }
     override func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
