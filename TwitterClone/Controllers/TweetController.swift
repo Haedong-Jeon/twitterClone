@@ -13,6 +13,7 @@ private let cellReuseIdentifier: String = "TweetCell"
 class TweetController: UICollectionViewController {
     //MARK: - Properties
     private let tweet: Tweet
+    private let actionSheetLauncher: ActionSheetLauncher?
     private var replies: [Tweet] = [Tweet](){
         didSet {
             collectionView.reloadData()
@@ -21,6 +22,7 @@ class TweetController: UICollectionViewController {
     //MARK: - LifeCycles
     init(tweet: Tweet) {
         self.tweet = tweet
+        self.actionSheetLauncher = ActionSheetLauncher(user: tweet.user!)
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
     }
     required init?(coder: NSCoder) {
@@ -63,6 +65,7 @@ extension TweetController {
             return UICollectionReusableView()
         }
         header.tweet = self.tweet
+        header.delegate = self
         return header
     }
 }
@@ -75,5 +78,11 @@ extension TweetController: UICollectionViewDelegateFlowLayout {
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 250)
+    }
+}
+//MARK: - Tweet Header Delegate
+extension TweetController: TweetHeaderDelegate {
+    func showActionSheet() {
+        actionSheetLauncher?.show()
     }
 }
