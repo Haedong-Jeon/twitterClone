@@ -47,7 +47,6 @@ class TweetController: UICollectionViewController {
         }
     }
 }
-
 //MARK: - UICollectionView DataSource / Delegate
 extension TweetController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
