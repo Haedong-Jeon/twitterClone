@@ -15,6 +15,7 @@ class ActionSheetLauncher: NSObject {
     private let user: User
     private let tableView: UITableView = UITableView()
     private var window: UIWindow?
+    private lazy var viewModel: ActionSheetViewModel = ActionSheetViewModel(user: self.user)
     private lazy var blackView: UIView = {
         let view: UIView = UIView()
         view.alpha = 0
@@ -51,7 +52,7 @@ class ActionSheetLauncher: NSObject {
     func show() {
         configureTableView()
         
-        let height: CGFloat = CGFloat(3 * 60) + 100
+        let height: CGFloat = CGFloat(viewModel.options.count * 60) + 100
         guard let window = UIApplication.shared.windows.first(where: {$0.isKeyWindow}) else { return }
         self.window =  window
         
@@ -89,12 +90,13 @@ class ActionSheetLauncher: NSObject {
 }
 extension ActionSheetLauncher: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return viewModel.options.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell: ActionSheetCell = tableView.dequeueReusableCell(withIdentifier: reuseIdentifier, for: indexPath) as? ActionSheetCell else {
             return UITableViewCell()
         }
+        cell.options = viewModel.options[indexPath.row]
         return cell
     }
 }
