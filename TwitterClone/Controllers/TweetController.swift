@@ -13,7 +13,7 @@ private let cellReuseIdentifier: String = "TweetCell"
 class TweetController: UICollectionViewController {
     //MARK: - Properties
     private let tweet: Tweet
-    private let actionSheetLauncher: ActionSheetLauncher?
+    private var actionSheetLauncher: ActionSheetLauncher?
     private var replies: [Tweet] = [Tweet](){
         didSet {
             collectionView.reloadData()
@@ -22,7 +22,6 @@ class TweetController: UICollectionViewController {
     //MARK: - LifeCycles
     init(tweet: Tweet) {
         self.tweet = tweet
-        self.actionSheetLauncher = ActionSheetLauncher(user: tweet.user!)
         super.init(collectionViewLayout: UICollectionViewFlowLayout())
     }
     required init?(coder: NSCoder) {
@@ -38,6 +37,11 @@ class TweetController: UICollectionViewController {
         collectionView.backgroundColor = UIColor.white
         collectionView.register(TweetCell.self, forCellWithReuseIdentifier: cellReuseIdentifier)
         collectionView.register(TweetHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: headerReuseIdentifier )
+    }
+    func showActionSheet(forUser user: User) {
+        self.actionSheetLauncher = ActionSheetLauncher(user: user)
+        self.actionSheetLauncher!.delegate = self
+        self.actionSheetLauncher!.show()
     }
     //MARK: - Selectors
     //MARK: - API
@@ -82,6 +86,18 @@ extension TweetController: UICollectionViewDelegateFlowLayout {
 //MARK: - Tweet Header Delegate
 extension TweetController: TweetHeaderDelegate {
     func showActionSheet() {
-        actionSheetLauncher?.show()
+        if tweet.user!.isCurrentUser {
+            showActionSheet(forUser: tweet.user!)
+        } else {
+            UserService.shared.checkIfUserIsFollowed(uid: tweet.user!.uid) { [self] isFollowed in
+                var user = self.tweet.user!
+                user.isFollowed = isFollowed
+                showActionSheet(forUser: tweet.user!)
+            }
+        }
+    }
+}
+extension TweetController: ActionSheetLauncherDelegate {
+    func didSelect(options: ActionSheetOptions) {
     }
 }
