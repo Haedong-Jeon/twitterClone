@@ -29,6 +29,13 @@ struct TweetViewModel {
     var likesAttributedString: NSAttributedString? {
         return attributedText(withValue: tweet.likes, text: " likes")
     }
+    var likeButtonTintColor: UIColor {
+        return tweet.didLike ? UIColor.red : UIColor.lightGray
+    }
+    var likeButtonImg: UIImage {
+        let imgName = tweet.didLike ? "like_filled" : "like"
+        return UIImage(named: imgName)!
+    }
     var profileImgURL: URL {
         (tweet.user?.profileImgURL)!
     }

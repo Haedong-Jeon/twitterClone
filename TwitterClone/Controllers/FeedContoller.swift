@@ -33,9 +33,18 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         navigationController?.navigationBar.isHidden = false
     }
     //MARK: - API
+    func checkIfUserLikedTweet(_ tweets: [Tweet]) {
+        for (index, tweet) in tweets.enumerated() {
+            TweetService.shared.checkIfUserLikedTweet(tweet) { didLike in
+                guard didLike == true else { return }
+                self.tweets[index].didLike = true
+            }
+        }
+    }
     func fetchTweets() {
         TweetService.shared.fetchTweets { tweets in
             self.tweets = tweets
+            self.checkIfUserLikedTweet(tweets)
         }
     }
     //MARK: - Helpers
@@ -84,6 +93,15 @@ extension FeedController {
     }
 }
 extension FeedController: TweetCellDelegateProtocol {
+    func handleLikeTapped(_ cell: TweetCell) {
+        guard let tweet: Tweet = cell.tweet else { return }
+        TweetService.shared.updateLikesInDatabase(tweet: tweet) { (err, ref) in
+            cell.tweet?.didLike.toggle()
+            let likes: Int = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
+            cell.tweet?.likes = likes
+        }
+    }
+    
     func handleProfileImgTapped(_ cell: TweetCell) {
         guard let user: User = cell.tweet?.user else { return }
         let controller: ProfileController = ProfileController(user: user)
