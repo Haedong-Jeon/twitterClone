@@ -9,7 +9,7 @@ import Firebase
 
 struct Tweet {
     let caption: String
-    let tweetId: String
+    let tweetID: String
     let uid: String
     var likes: Int
     var timeStamp: Date!
@@ -17,8 +17,8 @@ struct Tweet {
     var didLike: Bool = false
     let retweetCount: Int
     
-    init(tweetId: String, dictionary: [String: Any]) {
-        self.tweetId = tweetId
+    init(tweetID: String, dictionary: [String: Any]) {
+        self.tweetID = tweetID
         self.caption = dictionary["caption"] as? String ?? "Error in caption"
         self.uid = dictionary["uid"] as? String ?? "Error in uid"
         self.likes = dictionary["likes"] as? Int ?? 0

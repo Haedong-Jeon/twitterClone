@@ -94,12 +94,15 @@ extension FeedController {
 }
 extension FeedController: TweetCellDelegateProtocol {
     func handleLikeTapped(_ cell: TweetCell) {
-        guard let tweet: Tweet = cell.tweet else { return }
+        guard var tweet: Tweet = cell.tweet else { return }
         TweetService.shared.updateLikesInDatabase(tweet: tweet) { (err, ref) in
             cell.tweet?.didLike.toggle()
             let likes: Int = tweet.didLike ? tweet.likes - 1 : tweet.likes + 1
+            tweet.didLike.toggle()
             cell.tweet?.likes = likes
         }
+        guard tweet.didLike else { return }
+        NotificationService.shared.uploadNotification(type: NotificationType.like, tweet: tweet)
     }
     
     func handleProfileImgTapped(_ cell: TweetCell) {

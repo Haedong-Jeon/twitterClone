@@ -68,6 +68,9 @@ class UploadTweetsController: UIViewController {
                 print("DEBUG: fail to upload tweet - \(error)")
                 return
             }
+            if case .reply(let tweet) = self.config {
+                NotificationService.shared.uploadNotification(type: NotificationType.reply, tweet: tweet)
+            }
             self.dismiss(animated: true, completion: nil)
         }
     }
