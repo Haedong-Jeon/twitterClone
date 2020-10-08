@@ -132,7 +132,7 @@ class TweetCell: UICollectionViewCell {
         infoLabel.attributedText = viewModel.userInfoText
         captionLabel.text = tweet.caption
         
-        likeButton.tintColor = viewModel.likeButtonTintColor
         likeButton.setImage(viewModel.likeButtonImg, for: UIControl.State.normal)
+        likeButton.tintColor = viewModel.likeButtonTintColor
     }
 }

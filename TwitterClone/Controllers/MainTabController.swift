@@ -29,7 +29,7 @@ class MainTabController: UITabBarController {
     //MARK: - LifeCycle
     override func viewDidLoad() {
         super.viewDidLoad()
-//        userLogOut()
+        userLogOut()
         authenticateUserAndConfigureUI()
     }
     //MARK: - API

@@ -36,8 +36,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
     func checkIfUserLikedTweet(_ tweets: [Tweet]) {
         for (index, tweet) in tweets.enumerated() {
             TweetService.shared.checkIfUserLikedTweet(tweet) { didLike in
-                guard didLike == true else { return }
-                self.tweets[index].didLike = true
+                self.tweets[index].didLike = didLike
             }
         }
     }
