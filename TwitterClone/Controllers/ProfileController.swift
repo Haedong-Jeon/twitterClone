@@ -12,11 +12,26 @@ private let reuseIdentifierForHeader: String = "TweetHeader"
 class ProfileController: UICollectionViewController {
     //MARK: - Properties
     private var user: User
-    private var tweets: [Tweet] = [Tweet]() {
+    private var selectedFilter: ProfileFilterOptions = ProfileFilterOptions.tweets {
         didSet {
             collectionView.reloadData()
         }
     }
+    private var tweets: [Tweet] = [Tweet]()
+    private var likedTweets: [Tweet] = [Tweet]()
+    private var replyTweets: [Tweet] = [Tweet]()
+    
+    private var currentDataSource: [Tweet] {
+        switch selectedFilter {
+        case .tweets:
+            return tweets
+        case .likes:
+            return likedTweets
+        case .replies:
+            return replyTweets
+        }
+    }
+
     //MARK: - LifeCycles
     init(user: User) {
         self.user = user
@@ -78,13 +93,13 @@ extension ProfileController {
 //MARK: - UICollectionView Control
 extension ProfileController {
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.tweets.count
+        return self.currentDataSource.count
     }
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell: TweetCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? TweetCell else {
             return UICollectionViewCell()
         }
-        cell.tweet = tweets[indexPath.row]
+        cell.tweet = self.currentDataSource[indexPath.row]
         return cell
     }
 }
