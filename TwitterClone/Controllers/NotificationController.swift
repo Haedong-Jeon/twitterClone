@@ -32,18 +32,30 @@ class NotificationController: UITableViewController {
         tableView.register(NotificationCell.self, forCellReuseIdentifier: notificationIdentifier)
         tableView.rowHeight = 60
         tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
+        
+        let refreshControl: UIRefreshControl = UIRefreshControl()
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControl.Event.valueChanged)
+    }
+    //MARK: - Selectors
+    @objc func handleRefresh() {
+        fetchNotifications()
     }
     //MARK: - API
     func fetchNotifications() {
+        refreshControl?.beginRefreshing()
         NotificationService.shared.fetchNotifications { notifications in
             self.notifications = notifications
-            
-            for(index, notification) in notifications.enumerated() {
-                if case .follow = notification.type {
-                    let user: User = notification.user
-                    UserService.shared.checkIfUserIsFollowed(uid: user.uid) { isFollowed in
-                        self.notifications[index].user.isFollowed = isFollowed
-                    }
+            self.checkIfUserIsFollowed(notifications: self.notifications)
+            self.refreshControl?.endRefreshing()
+        }
+    }
+    func checkIfUserIsFollowed(notifications: [Notification]) {
+        for(index, notification) in notifications.enumerated() {
+            if case .follow = notification.type {
+                let user: User = notification.user
+                UserService.shared.checkIfUserIsFollowed(uid: user.uid) { isFollowed in
+                    self.notifications[index].user.isFollowed = isFollowed
                 }
             }
         }
@@ -76,7 +88,17 @@ extension NotificationController {
 //MARK: - notification cell delegate
 extension NotificationController: NotificationCellDelegate {
     func didTapFollow(_ cell: NotificationCell) {
+        guard let user: User = cell.notification?.tweet?.user else { return }
         
+        if user.isFollowed {
+            UserService.shared.unfollowUser(uid: user.uid) { (err, ref) in
+                cell.notification?.user.isFollowed = false
+            }
+        } else {
+            UserService.shared.followUser(uid: user.uid) { (err, ref) in
+                cell.notification?.user.isFollowed = true
+            }
+        }
     }
     func didTapProfileImg(_ cell: NotificationCell) {
         guard let user: User = cell.notification?.user else { return }
