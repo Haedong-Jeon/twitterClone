@@ -24,3 +24,5 @@ let DB_REF_USER_LIKES: DatabaseReference = DB_REF_ROOT.child("user-likes")
 let DB_REF_TWEET_LIKES: DatabaseReference = DB_REF_ROOT.child("tweet-likes")
 
 let DB_REF_NOTIFICATIONS: DatabaseReference = DB_REF_ROOT.child("notifications")
+let DB_REF_USER_REPLIES: DatabaseReference = DB_REF_ROOT.child("user-replies")
+
