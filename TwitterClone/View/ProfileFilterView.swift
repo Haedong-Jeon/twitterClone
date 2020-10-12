@@ -9,12 +9,17 @@ import UIKit
 
 private let reuseIdentifier: String = "profileFilterCell"
 protocol ProfileFilterViewDelegate: class {
-    func filterView(_ view: ProfileFilterView, didSelect indexPath: IndexPath)
+    func filterView(_ view: ProfileFilterView, didSelect index: Int)
 }
 
 class ProfileFilterView: UIView {
     //MARK: - Properties
     weak var delegate: ProfileFilterViewDelegate?
+    private let underLineView: UIView = {
+        let view: UIView = UIView()
+        view.backgroundColor = UIColor.twitterBlue
+        return view
+    }()
     lazy var collectionView: UICollectionView = {
         let layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         let collectionView: UICollectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: layout)
@@ -35,6 +40,10 @@ class ProfileFilterView: UIView {
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    override func layoutSubviews() {
+        addSubview(underLineView)
+        underLineView.anchor(left: leftAnchor, bottom: bottomAnchor, width: frame.width / 3, height: 2)
     }
 }
 
@@ -63,6 +72,11 @@ extension ProfileFilterView: UICollectionViewDelegateFlowLayout {
 //MARK: - UICollectionViewDelegate
 extension ProfileFilterView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        delegate?.filterView(self, didSelect: indexPath)
+        delegate?.filterView(self, didSelect: indexPath.row)
+        guard let cell = collectionView.cellForItem(at: indexPath) as? ProfileFilterCell else { return }
+        let xPosition = cell.frame.origin.x
+        UIView.animate(withDuration: 0.3) {
+            self.underLineView.frame.origin.x = xPosition
+        }
     }
 }

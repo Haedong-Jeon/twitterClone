@@ -57,11 +57,15 @@ class MainTabController: UITabBarController {
         guard let currentUid: String = Auth.auth().currentUser?.uid else { return }
         UserService.shared.fetchUser(uid: currentUid) { user in
             self.user = user
+            print(user.fullName)
         }
     }
     //MARK: - Selectors
     @objc func actionButtonTapped() {
-        guard let user: User = self.user else { return }
+        guard let user: User = self.user else {
+            print("fail to get current user ")
+            return
+        }
         let uploadTweetController: UploadTweetsController = UploadTweetsController(user: user, config: UploadTweetConfiguration.tweet)
         let nav: UINavigationController = UINavigationController(rootViewController: uploadTweetController)
         present(nav, animated: true, completion: nil)

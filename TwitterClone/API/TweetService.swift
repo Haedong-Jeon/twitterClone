@@ -27,11 +27,13 @@ struct TweetService {
     }
     func fetchTweet(withTweetID tweetID: String, completion: @escaping(Tweet) -> Void) {
         DB_REF_TWEETS.observe(DataEventType.childAdded) { snapShot in
+            if snapShot.key != tweetID {
+                return
+            }
             guard let dictionary: [String: Any] = snapShot.value as? [String: Any] else { return }
             guard let uid: String = dictionary["uid"] as? String else { return }
             
             UserService.shared.fetchUser(uid: uid) { user in
-                let tweetID: String = snapShot.key
                 var tweet: Tweet = Tweet(tweetID: tweetID, dictionary: dictionary)
                 tweet.user = user
                 completion(tweet)
@@ -73,6 +75,18 @@ struct TweetService {
             UserService.shared.fetchUser(uid: uid) { user in
                 var tweet: Tweet = Tweet(tweetID: tweetID, dictionary: dictionary)
                 tweet.user = user
+                tweets.append(tweet)
+                completion(tweets)
+            }
+        }
+    }
+    func fetchLikes(forUser user: User, completion: @escaping([Tweet]) -> Void) {
+        var tweets: [Tweet] = [Tweet]()
+        DB_REF_USER_LIKES.child(user.uid).observe(.childAdded) { snapShot in
+            let tweetID: String = snapShot.key
+            self.fetchTweet(withTweetID: tweetID) { likedTweet in
+                var tweet: Tweet = likedTweet
+                tweet.didLike = true
                 tweets.append(tweet)
                 completion(tweets)
             }

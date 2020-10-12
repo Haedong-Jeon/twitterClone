@@ -45,6 +45,7 @@ class ProfileController: UICollectionViewController {
         super.viewDidLoad()
         configureCollectionView()
         fetchTweets()
+        fetchLikedTweets()
         fetchUserStats()
         checkIfUserFollowed()
     }
@@ -59,11 +60,15 @@ class ProfileController: UICollectionViewController {
         collectionView.contentInsetAdjustmentBehavior = UIScrollView.ContentInsetAdjustmentBehavior.never
         collectionView.register(TweetCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.register(ProfileHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: reuseIdentifierForHeader)
+        
+        guard let tapHeight: CGFloat = tabBarController?.tabBar.frame.height else { return }
+        collectionView.contentInset.bottom = tapHeight
     }
     //MARK: - API
     func fetchTweets() {
         TweetService.shared.fetchTweets(forUser: user) { tweets in
             self.tweets = tweets
+            self.collectionView.reloadData()
         }
     }
     func checkIfUserFollowed() {
@@ -76,6 +81,11 @@ class ProfileController: UICollectionViewController {
         UserService.shared.fetchUserStats(uid: user.uid) { stats in
             self.user.stats = stats
             self.collectionView.reloadData()
+        }
+    }
+    func fetchLikedTweets() {
+        TweetService.shared.fetchLikes(forUser: user) { tweets in
+            self.likedTweets = tweets
         }
     }
 }
@@ -106,13 +116,19 @@ extension ProfileController {
 //MARK: - UICollectionView layout
 extension ProfileController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.frame.width, height: 100)
+        let viewModel: TweetViewModel = TweetViewModel(tweet: tweets[indexPath.row])
+        let height: CGFloat = viewModel.size(forWidth: view.frame.width).height
+        return CGSize(width: collectionView.frame.width, height: height + 72)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: view.frame.width, height: 350)
     }
 }
 extension ProfileController: ProfileHeaderDelegate {
+    func didSelect(filter: ProfileFilterOptions) {
+        self.selectedFilter = filter
+    }
+    
     func handleBackButton() {
         navigationController?.popViewController(animated: true)
     }
