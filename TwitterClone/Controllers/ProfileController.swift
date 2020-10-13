@@ -123,7 +123,11 @@ extension ProfileController {
 extension ProfileController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let viewModel: TweetViewModel = TweetViewModel(tweet: tweets[indexPath.row])
-        let height: CGFloat = viewModel.size(forWidth: view.frame.width).height
+        var height: CGFloat = viewModel.size(forWidth: view.frame.width).height
+        
+        if currentDataSource[indexPath.row].isReply {
+            height += 20
+        }
         return CGSize(width: collectionView.frame.width, height: height + 72)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {

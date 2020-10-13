@@ -75,6 +75,12 @@ class TweetCell: UICollectionViewCell {
         button.addTarget(self, action: #selector(handleShareTapped), for: UIControl.Event.touchUpInside)
         return button
     }()
+    private let replyLabel: UILabel = {
+        let label: UILabel = UILabel()
+        label.textColor = UIColor.lightGray
+        label.font = UIFont.systemFont(ofSize: 12)
+        return label
+    }()
     //MARK: - Selectors
     @objc func handleCommentTapped() {
         delegate?.handleReplyTapped(self)
@@ -95,19 +101,26 @@ class TweetCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = UIColor.white
-        addSubview(profileImgView)
-        profileImgView.anchor(top: topAnchor, left: leftAnchor, paddingTop: 8, paddingLeft: 8)
+
+        let captionStack: UIStackView = UIStackView(arrangedSubviews: [infoLabel, captionLabel])
+        captionStack.axis = NSLayoutConstraint.Axis.vertical
+        captionStack.distribution = UIStackView.Distribution.fillProportionally
+        captionStack.spacing = 4
         
-        let labelStack: UIStackView = UIStackView(arrangedSubviews: [infoLabel, captionLabel])
-        labelStack.axis = NSLayoutConstraint.Axis.vertical
-        labelStack.distribution = UIStackView.Distribution.fillProportionally
-        labelStack.spacing = 4
-        addSubview(labelStack)
-        labelStack.anchor(top: profileImgView.topAnchor, left: profileImgView.rightAnchor, right: rightAnchor, paddingLeft: 12, paddingRight: 12)
+        let imgCaptionStack: UIStackView = UIStackView(arrangedSubviews: [profileImgView, captionStack])
+        imgCaptionStack.distribution = UIStackView.Distribution.fillProportionally
+        imgCaptionStack.spacing = 12
+        imgCaptionStack.alignment = UIStackView.Alignment.leading
         
-        infoLabel.text = ""
-        infoLabel.font = UIFont.systemFont(ofSize: 14)
+        let stack: UIStackView = UIStackView(arrangedSubviews: [replyLabel, imgCaptionStack])
+        stack.axis = NSLayoutConstraint.Axis.vertical
+        stack.spacing = 8
+        stack.distribution = UIStackView.Distribution.fillProportionally
         
+        addSubview(stack)
+        stack.anchor(top: topAnchor, left: leftAnchor, right: rightAnchor, paddingTop: 4, paddingLeft: 12, paddingRight: 12)
+        
+
         let buttonStack: UIStackView = UIStackView(arrangedSubviews: [commentButton, retweetButton, likeButton, shareButton])
         buttonStack.axis = NSLayoutConstraint.Axis.horizontal
         buttonStack.spacing = 72
@@ -134,5 +147,8 @@ class TweetCell: UICollectionViewCell {
         
         likeButton.setImage(viewModel.likeButtonImg, for: UIControl.State.normal)
         likeButton.tintColor = viewModel.likeButtonTintColor
+        
+        replyLabel.isHidden = viewModel.shouldHideReplyLabel
+        replyLabel.text = viewModel.replyText
     }
 }

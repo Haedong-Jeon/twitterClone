@@ -48,6 +48,13 @@ struct TweetViewModel {
         title.append(NSAttributedString(string: "· \(timeStamp)", attributes: [.font: UIFont.systemFont(ofSize: 14), .foregroundColor: UIColor.lightGray]))
         return title
     }
+    var shouldHideReplyLabel: Bool {
+        return !tweet.isReply
+    }
+    var replyText: String? {
+        guard let replyTarget: String = tweet.replyTo else { return nil }
+        return "→ reply to \(replyTarget)"
+    }
     init(tweet: Tweet) {
         self.tweet = tweet
         self.user = tweet.user!
