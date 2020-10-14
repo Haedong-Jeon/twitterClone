@@ -33,21 +33,28 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         navigationController?.navigationBar.isHidden = false
     }
     //MARK: - API
-    func checkIfUserLikedTweet(_ tweets: [Tweet]) {
-        for (index, tweet) in tweets.enumerated() {
+    func checkIfUserLikedTweet() {
+        tweets.forEach { tweet in
             TweetService.shared.checkIfUserLikedTweet(tweet) { didLike in
-                self.tweets[index].didLike = didLike
+                guard didLike == true else { return }
+                if let index = self.tweets.firstIndex(where: { $0.tweetID == tweet.tweetID }) {
+                    self.tweets[index].didLike = true
+                }
             }
         }
     }
     func fetchTweets() {
+        collectionView.refreshControl?.beginRefreshing()
         TweetService.shared.fetchTweets { tweets in
-            self.tweets = tweets
-            self.checkIfUserLikedTweet(tweets)
+            self.tweets = tweets.sorted(by: { $0.timeStamp > $1.timeStamp})
+            self.checkIfUserLikedTweet()
+            self.collectionView.refreshControl?.endRefreshing()
         }
     }
     //MARK: - Helpers
     func configureUI() {
+        let refreshControl: UIRefreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: UIControl.Event.valueChanged)
         view.backgroundColor = UIColor.white
         collectionView.register(TweetCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.backgroundColor = UIColor.white
@@ -55,6 +62,7 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         imageView.contentMode = UIImageView.ContentMode.scaleAspectFill
         imageView.setDimensions(width: 44, height: 44)
         navigationItem.titleView = imageView
+        collectionView.refreshControl = refreshControl
     }
     func configureLeftBarButton() {
         guard let user: User = user else { return }
@@ -66,6 +74,10 @@ class FeedController: UICollectionViewController, UICollectionViewDelegateFlowLa
         profileImgView.sd_setImage(with: user.profileImgURL , completed: nil)
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: profileImgView)
+    }
+    //MARK: - Selectors
+    @objc func handleRefresh() {
+        fetchTweets()
     }
 }
 //MARK: - Collection View Control

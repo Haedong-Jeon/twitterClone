@@ -32,6 +32,12 @@ class TweetHeader: UICollectionReusableView {
         
         return imgView
     }()
+    private let replyLabel: UILabel = {
+        var label = UILabel()
+        label.textColor = UIColor.lightGray
+        label.font = UIFont.systemFont(ofSize: 12)
+        return label
+    }()
     private let fullNameLabel: UILabel = {
         let label: UILabel = UILabel()
         label.text = "HAEDONG"
@@ -122,11 +128,15 @@ class TweetHeader: UICollectionReusableView {
         labelStack.axis = NSLayoutConstraint.Axis.vertical
         labelStack.spacing = -5
         
-        let userInfoStack: UIStackView = UIStackView(arrangedSubviews: [profileImgView, labelStack])
-        userInfoStack.axis = NSLayoutConstraint.Axis.horizontal
-        userInfoStack.spacing = 12
+        let imgCaptionStack: UIStackView = UIStackView(arrangedSubviews: [profileImgView, labelStack])
+        imgCaptionStack.axis = NSLayoutConstraint.Axis.horizontal
+        imgCaptionStack.spacing = 12
         
+        let userInfoStack: UIStackView = UIStackView(arrangedSubviews: [replyLabel, imgCaptionStack])
         addSubview(userInfoStack)
+        userInfoStack.axis = NSLayoutConstraint.Axis.vertical
+        userInfoStack.spacing = 8
+        userInfoStack.distribution = UIStackView.Distribution.fillProportionally
         userInfoStack.anchor(top: topAnchor, left: leftAnchor, paddingTop: 16, paddingLeft: 16)
         
         addSubview(captionLabel)
@@ -179,6 +189,9 @@ class TweetHeader: UICollectionReusableView {
         likeButton.tintColor = viewModel.likeButtonTintColor
 
         profileImgView.sd_setImage(with: viewModel.profileImgURL)
+        
+        replyLabel.isHidden = viewModel.shouldHideReplyLabel
+        replyLabel.text = viewModel.replyText
     }
     //MARK: - API
     //MARK: - Selectors

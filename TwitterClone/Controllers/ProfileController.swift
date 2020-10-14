@@ -9,6 +9,7 @@ import UIKit
 private let reuseIdentifier: String = "TweetCell"
 private let reuseIdentifierForHeader: String = "TweetHeader"
 
+
 class ProfileController: UICollectionViewController {
     //MARK: - Properties
     private var user: User
@@ -105,6 +106,11 @@ extension ProfileController {
         header.delegate = self
         return header
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let tweetController: TweetController = TweetController(tweet: currentDataSource[indexPath.row])
+        navigationController?.pushViewController(tweetController, animated: true)
+    }
 }
 //MARK: - UICollectionView Control
 extension ProfileController {
@@ -143,7 +149,13 @@ extension ProfileController: ProfileHeaderDelegate {
         navigationController?.popViewController(animated: true)
     }
     func handleEditProfileFollow(_ header: ProfileHeader) {
-        if self.user.isCurrentUser { return }
+        if self.user.isCurrentUser {
+            let controller: EditProfileController = EditProfileController(user: user)
+            let nav: UINavigationController = UINavigationController(rootViewController: controller)
+            nav.modalPresentationStyle = UIModalPresentationStyle.fullScreen
+            present(nav, animated: true, completion: nil)
+            return
+        }
         
         if self.user.isFollowed {
             UserService.shared.unfollowUser(uid: user.uid) { (error, ref) in

@@ -46,14 +46,22 @@ struct TweetService {
     }
     func fetchTweets(completion: @escaping([Tweet]) -> Void) {
         var tweets: [Tweet] = [Tweet]()
-        DB_REF_TWEETS.observe(DataEventType.childAdded) { snapShot in
-            guard let dictionary: [String: Any] = snapShot.value as? [String: Any] else { return }
-            guard let uid: String = dictionary["uid"] as? String else { return }
+        guard let currentUID = Auth.auth().currentUser?.uid else { return }
+        
+        DB_REF_USER_FOLLOWING.child(currentUID).observe(.childAdded) { snapShot in
+            let followingUID: String = snapShot.key
             
-            UserService.shared.fetchUser(uid: uid) { user in
+            DB_REF_USER_TWEETS.child(followingUID).observe(.childAdded) { snapShot in
                 let tweetID: String = snapShot.key
-                var tweet: Tweet = Tweet(tweetID: tweetID, dictionary: dictionary)
-                tweet.user = user
+                self.fetchTweet(withTweetID: tweetID) { tweet in
+                    tweets.append(tweet)
+                    completion(tweets)
+                }
+            }
+        }
+        DB_REF_USER_TWEETS.child(currentUID).observe(.childAdded) { snapShot in
+            let tweetID: String = snapShot.key
+            self.fetchTweet(withTweetID: tweetID) { tweet in
                 tweets.append(tweet)
                 completion(tweets)
             }
@@ -80,10 +88,12 @@ struct TweetService {
                 guard let dictionary: [String: Any] = snapShot.value as? [String: Any] else { return }
                 guard let uid: String = dictionary["uid"] as? String else { return }
                 
+                let replyID: String = snapShot.key
+                
                 UserService.shared.fetchUser(uid: uid) { user in
-                    var tweet: Tweet = Tweet(tweetID: tweetKey, dictionary: dictionary)
-                    tweet.user = user
-                    replies.append(tweet)
+                    var reply: Tweet = Tweet(tweetID: replyID, dictionary: dictionary)
+                    reply.user = user
+                    replies.append(reply)
                     completion(replies)
                 }
             }
